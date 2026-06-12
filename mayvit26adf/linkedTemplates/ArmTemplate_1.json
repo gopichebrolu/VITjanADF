@@ -13,6 +13,43 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Json3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"fn": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().fn",
+							"type": "Expression"
+						},
+						"fileSystem": "input"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"fileName": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Json4')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1418,6 +1455,7 @@
 				"lastPublishTime": "2026-06-09T16:01:00Z"
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Json3')]",
 				"[concat(variables('factoryId'), '/datasets/Json4')]",
 				"[concat(variables('factoryId'), '/datasets/Parquet3')]",
 				"[concat(variables('factoryId'), '/datasets/Parquet4')]"
